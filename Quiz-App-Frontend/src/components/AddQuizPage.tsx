@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 
@@ -11,6 +11,13 @@ type QuestionForm = {
 function AddQuizPage() {
 
   async function submitQuiz(data: any) {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      alert('Please SignIn to add quizzes.')
+      navigate('/')
+      return 
+    }
+    
     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/quizzes`, {
         method: 'POST',
         headers: {
@@ -18,11 +25,13 @@ function AddQuizPage() {
         },
         body: JSON.stringify({
             quizName: data.quizName,
-            questions: data.questions
+            questions: data.questions,
+            token
         })
     })
-    const { message } = await response.json()
-    alert(message)
+    const result = await response.json()
+    alert(result.message)
+    console.log(result)
     navigate('/quizzes') 
   }
 

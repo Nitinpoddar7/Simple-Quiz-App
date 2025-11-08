@@ -3,6 +3,7 @@ import { Route, Routes, BrowserRouter } from "react-router";
 import AvailableQuizzes from "./components/Quizzes";
 import QuizPage from "./components/QuizPage";
 import AddQuizPage from "./components/AddQuizPage";
+import StatPage from "./components/StatPage";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Route path="/quizzes" element={<AvailableQuizzes />} />
       <Route path="/quiz/:title" element={<QuizPage />} />
       <Route path="/quiz/new" element={<AddQuizPage />} />
+      <Route path="/stats" element={<StatPage />} />
     </Routes>
   </BrowserRouter>)
 }

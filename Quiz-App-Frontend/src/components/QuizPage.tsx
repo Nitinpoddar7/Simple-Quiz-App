@@ -21,6 +21,31 @@ const fetchQuizData = async (title: string | undefined) => {
   return data;
 };
 
+const updateStats = async (title: string, score: number) => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    alert('No token found. Please sign in again.');
+    return;
+  }
+
+  const now = new Date();
+  const time = `${now.getDate()} ${now.toLocaleString('default', { month: 'short' })} ${now.getFullYear()} at ${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/stats`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      token,
+      title,
+      score: score.toString(),
+      time
+    })
+  })
+  if (response.ok) console.log('stats updated')
+}
+
 function QuizPage() {
   const { title } = useParams();
   const navigate = useNavigate();
@@ -52,6 +77,7 @@ function QuizPage() {
       setSelectedOption(null);
     } else {
       setShowResult(true);
+      updateStats(quizData.quizName, score + (selectedOption !== null && quizData.questions[currentQuestion].answer - 1 === selectedOption ? 1 : 0));
     }
   };
 
